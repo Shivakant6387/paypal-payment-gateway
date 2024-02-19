@@ -14,9 +14,9 @@ import java.util.Map;
 public class PaypalConfig {
     @Value("${paypal.client.id}")
     private String clientId;
-    @Value("{paypal.client.secret}")
+    @Value("${paypal.client.secret}")
     private String clientSecret;
-    @Value("{paypal.mode}")
+    @Value("${paypal.mode}")
     private String mode;
 
     @Bean
@@ -27,14 +27,14 @@ public class PaypalConfig {
     }
 
     @Bean
-    public OAuthTokenCredential authTokenCredential() {
+    public OAuthTokenCredential oAuthTokenCredential() {
         return new OAuthTokenCredential(clientId, clientSecret, paypalSdkConfig());
     }
 
     @Bean
     public APIContext apiContext() throws PayPalRESTException {
-        APIContext apiContext = new APIContext(authTokenCredential().getAccessToken());
-        apiContext.setConfigurationMap(paypalSdkConfig());
-        return apiContext();
+        APIContext context = new APIContext(oAuthTokenCredential().getAccessToken());
+        context.setConfigurationMap(paypalSdkConfig());
+        return context;
     }
 }
